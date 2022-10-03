@@ -5,12 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etch a Sketch</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="grid-container">
 
+    </div>
 
     <script>
+        let gridWidth = 16;
+        let gridHeight = 16;
+        function createGrid(){
 
+            let newBlock;
+            let gridContainer;
+            for (let x = 0; x < gridWidth; x++){
+                for (let y = 0; y < gridHeight; y++){
+                    newBlock = document.createElement('div');
+                    gridContainer = document.querySelector('.grid-container');
+                    newBlock.classList.add('new-block');
+                    newBlock.style.cssText = 'width:50px; height:50px; background:grey;';
+                    gridContainer.appendChild(newBlock);
+                }
+            }
+            gridContainer.style.cssText = 'display: flex; width: 800px; flex-wrap:wrap;';
+        }
+        createGrid();
     </script>
 </body>
 </html>
