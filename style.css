@@ -1,3 +1,27 @@
 body{
     display: flex;
 }
+
+.block{
+    display: flex;
+    background-color: darkgray;
+    width: var(--BoxWidth);
+    height: var(--BoxWidth);
+}
+.block.drawn{
+    display: flex;
+    background-color: black;
+    width: var(--BoxWidth);
+    height: var(--BoxWidth);
+}
+
+.grid-container{
+    display: flex;
+    width: 800px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+:root{
+    --BoxWidth: 50px;
+}
