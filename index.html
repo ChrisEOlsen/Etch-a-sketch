@@ -11,37 +11,69 @@
     <div class="grid-container">
 
     </div>
+    <div class="button-container">
+        <button class="change-size-button">Change Size</button>
+        <button class="reset-button">Erase All</button>
+    </div>
 
     <script>
         let gridWidth = 16;
         let gridHeight = 16;
-        let newBlock;
-        let gridContainer;
         let screenWidth = 800;
+        let blockSize = screenWidth / gridWidth;
+
+        let cssBlank = 'display:flex; background:darkgrey; width:'+blockSize+'px; height:'+blockSize+'px;';
+        let cssDraw = 'display:flex; background:black; width:'+blockSize+'px; height:'+blockSize+'px;';
 
         function createGrid(){
+            const gridContainer = document.querySelector('.grid-container');
+
             for (let i = 0; i < gridHeight * gridWidth; i++){
-                newBlock = document.createElement('div');
-                gridContainer = document.querySelector('.grid-container');
+                const newBlock = document.createElement('div');
                 newBlock.classList.add('block');
+                newBlock.style.cssText = cssBlank;
                 gridContainer.appendChild(newBlock);
             }
-            gridContainer.style.cssText = 'display: flex; width: ' +  screenWidth + 'px; flex-wrap:wrap;';
-        }
-        createGrid();
-        
-        function draw (e){
-            this.classList.add("drawn");
+            gridContainer.style.cssText = 'display: flex; width: ' +  screenWidth + 'px; flex-wrap: wrap; flex-shrink: 0;';
         }
 
-        function reset (e){
-            const drawns = document.querySelectorAll('.drawn');
-            drawns.forEach(drawn => drawn.classList.remove("drawn"));
+        function callAllConsts(){
+            const blocks = document.querySelectorAll('.block');
+                  blocks.forEach(block => block.addEventListener('mouseover', draw));
+            const resetButton = document.querySelector('.reset-button');
+                  resetButton.addEventListener('click',reset);
+            const changeSizeButton = document.querySelector('.change-size-button');
+                  changeSizeButton.addEventListener('click',changeGrid);
         }
-        const blocks = document.querySelectorAll('.block');
-        blocks.forEach(block => block.addEventListener('mouseover', draw));
-        window.addEventListener('click',reset);
-        
-    </script>
+
+        createGrid();
+        callAllConsts();
+
+        function draw (e){
+            this.classList.add("drawn");
+            this.style.cssText = cssDraw;
+        }
+        function reset (){
+            const drawns = document.querySelectorAll('.drawn'); //for finding all drawnclasses
+            drawns.forEach(a => a.style.cssText = cssBlank);
+        }
+
+        function changeGrid (){
+            const blocks = document.querySelectorAll('.block');
+                  blocks.forEach(block => block.remove());
+            //redfine all necessary metrics
+            gridWidth = prompt('Input Grid Size: ');
+            gridHeight = gridWidth;
+            blockSize = screenWidth / gridWidth;
+            cssBlank = 'display:flex; background:darkgrey; width:'+blockSize+'px; height:'+blockSize+'px;';
+            cssDraw = 'display:flex; background:black; width:'+blockSize+'px; height:'+blockSize+'px;';
+            createGrid();
+            callAllConsts();
+        }
+       
+
+
+
+        </script>
 </body>
 </html>
