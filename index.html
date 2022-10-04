@@ -63,12 +63,17 @@
                   blocks.forEach(block => block.remove());
             //redfine all necessary metrics
             gridWidth = prompt('Input Grid Size: ');
-            gridHeight = gridWidth;
-            blockSize = screenWidth / gridWidth;
-            cssBlank = 'display:flex; background:darkgrey; width:'+blockSize+'px; height:'+blockSize+'px;';
-            cssDraw = 'display:flex; background:black; width:'+blockSize+'px; height:'+blockSize+'px;';
-            createGrid();
-            callAllConsts();
+            if (gridWidth <= 64){
+                gridHeight = gridWidth;
+                blockSize = screenWidth / gridWidth;
+                cssBlank = 'display:flex; background:darkgrey; width:'+blockSize+'px; height:'+blockSize+'px;';
+                cssDraw = 'display:flex; background:black; width:'+blockSize+'px; height:'+blockSize+'px;';
+                createGrid();
+                callAllConsts();
+            }else{
+                alert('ERROR, max = 64x64');
+                changeGrid();
+            }
         }
        
 
