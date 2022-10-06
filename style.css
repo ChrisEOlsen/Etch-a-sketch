@@ -1,6 +1,39 @@
 body{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    background-color: #1F2938;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+.title{
+    color: white;
+    font-weight: 700;
+    font-size: 36px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-family: sans-serif;
+}
+
+.project{
+    display: flex;
+    min-height: 82vh;
+    min-width: 100vw;
+}
+.project-right{
+    display: flex;
+    min-width: 50vw;
+    align-items: center;
+    justify-content: center;
+}
+.project-left{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    min-width: 25vw;
+    flex-shrink: 0;
 }
 
 .block{
@@ -9,6 +42,7 @@ body{
     width: var(--BoxWidth);
     height: var(--BoxWidth);
     user-select: none;
+    border: none;
 }
 
 .grid-container{
@@ -16,6 +50,9 @@ body{
     width: var(--ScreenSize);
     flex-wrap: wrap;
     flex-shrink: 0;
+    border: 9px solid white;
+    border-radius: 10px;
+    border-style: double;
 }
 
 :root{
@@ -26,52 +63,37 @@ body{
 .button-container{
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
-    margin-top: 20px;
+    align-items: center;
+    margin: 20px;
     gap: 10px;
+    flex-shrink: 0;
 }
 
-.reset-button, .change-size-button{
+.reset-button, .draw-button, .erase-button{
     height: 40px;
     width: 100px;
     border: 2px solid black;
     border-radius: 8px;
     background-color: white;
     font-weight: 600;
-}
-.reset-button:hover, .change-size-button:hover{
-    background-color: lightblue;
-    border: 4px solid black;
+    color: black;
 }
 
-.size-container{
+.reset-button:hover, .draw-button:hover, .erase-button:hover, 
+.show-grid-button:hover, .draw-button.active, .erase-button.active{
+    background-color:#1F2938;
+    border: 4px solid white;
+    color: white;
+}
+
+.size-content, .grid-content{
     display: flex;
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
-    border-radius: 6px;
-    justify-content: space-between;
+    color: white;
+    justify-content: center;
     align-items: center;
     width: 100px;
 }
-.size-content{
-    padding-left: 5px;
-    padding-right: 5px;
-}
-.screen-size-btn{
-    width: 200px;
-    background-color: white;
-    color: inherit;
-	border-top:none;
-    border-bottom: none;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-radius: 6px;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-    height:35px;
-}
+
 
 
 

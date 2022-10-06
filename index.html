@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="title">Etch-a-Sketch</div>
+    <div class="project">
+    <div class="project-left">
     <div class="button-container">
-        <button class="draw-button">Draw</button>
+        <button class="draw-button active">Draw</button>
         <button class="erase-button">Erase</button>
         <button class="reset-button">Erase All</button>
         <input type="range" min="1" max="64" value="16" class="slider" id="grid-size">
@@ -17,12 +20,16 @@
         <input type="range" min="600" max="800" value="600" class="slider" id="canvas">
         <div class="size-content">600 x 600</div>
     </div>
+    </div>
+    <div class="project-right">
     <div class="grid-container"></div>
+    </div>
+    </div>
 
     <script>
         //default
         let gridWidth = 16;
-        let gridHeight = 16;
+        let gridHeight;
         let screenSize = 600;
         let newBlock;
 
@@ -33,11 +40,13 @@
         var sliderCanvas = document.getElementById("canvas");
         sliderCanvas.oninput = function() {
             screenSize = this.value;
-            changeScreenSize(screenSize);
+            screenSizeContent.textContent = screenSize+' x '+screenSize;
+            changeScreenSize();
         }
         var sliderGridSize = document.getElementById("grid-size");
         sliderGridSize.oninput = function() {
             gridWidth = this.value;
+            gridSizeContent.textContent = gridWidth+' x '+gridWidth;
             changeGrid();
         }
 
@@ -49,11 +58,12 @@
 
         let drawOrErase = true;
         const drawMode = document.querySelector('.draw-button');
-              drawMode.addEventListener('click', () => {drawOrErase = true});
         const eraseMode = document.querySelector('.erase-button');
-              eraseMode.addEventListener('click', () => {drawOrErase = false});
+              drawMode.addEventListener('click', () => {drawOrErase = true; decideDrawOrErase()});
+              eraseMode.addEventListener('click', () => {drawOrErase = false; decideDrawOrErase()});
 
         function createGrid(){
+            gridHeight = gridWidth;
             for (let i = 0; i < gridHeight * gridWidth; i++){
                 newBlock = document.createElement('div');
                 newBlock.classList.add('block');
@@ -68,25 +78,26 @@
 
         createGrid();
 
+        function decideDrawOrErase(){ //button styles
+            if(drawOrErase){ drawMode.classList.add('active'); eraseMode.classList.remove('active');}
+            else if(!drawOrErase){eraseMode.classList.add('active'); drawMode.classList.remove('active')}
+        }
+
         function draw (e){
             if(e.type == 'mouseover' && !mouseDown)return;
             drawOrErase ? this.style.setProperty('background', 'black') 
                         : this.style.setProperty('background', 'darkgray');
         }
-        function reset (){
+        function reset(){
             newBlock.forEach(a => a.style.setProperty('background-color', 'darkgray'));
         }
-        function changeScreenSize(size){
-            screenSizeContent.textContent = size+' x '+size;
-            newBlock.forEach(a => a.style.setProperty('--BoxWidth', size / gridWidth+'px'));
-            gridContainer.style.setProperty('--ScreenSize', (size)+'px');
+        function changeScreenSize(){
+            newBlock.forEach(a => a.style.setProperty('--BoxWidth', screenSize / gridWidth+'px'));
+            gridContainer.style.setProperty('--ScreenSize', screenSize+'px');
         }
-        function changeGrid (){
-            gridSizeContent.textContent = gridWidth+' x '+gridWidth;
+        function changeGrid(){
             newBlock.forEach(block => block.remove());
-            gridHeight = gridWidth; createGrid();
-            changeScreenSize(screenSize);
-            drawOrErase = true; //activate draw mode again
+            createGrid();
         }
 
     </script>
