@@ -12,12 +12,12 @@
 
     </div>
     <div class="button-container">
-        <button class="change-size-button">Change Size</button>
+        <button class="change-size-button">Change Grid</button>
         <button class="reset-button">Erase All</button>
         <div class="size-container">
-            <button class="screen-size-btn">-</button>
+            <button class="screen-size-btn minus">-</button>
             <div class="size-content"></div>
-            <button class="screen-size-btn">+</button>
+            <button class="screen-size-btn plus">+</button>
         </div>
     </div>
 
@@ -35,10 +35,14 @@
         const gridContainer = document.querySelector('.grid-container');
         const resetButton = document.querySelector('.reset-button');
               resetButton.addEventListener('click',reset);
-        const changeSizeButton = document.querySelector('.change-size-button');
-              changeSizeButton.addEventListener('click',changeGrid);
+        const changeGridButton = document.querySelector('.change-size-button');
+              changeGridButton.addEventListener('click',changeGrid);
         const btnContent = document.querySelector('.size-content');
               btnContent.textContent = screenSize;
+        const screenPlus = document.querySelector('.plus');
+              screenPlus.addEventListener('click',() => {if (screenSize <= 750)screenSize += 50; changeScreenSize(screenSize);});
+        const screenMinus = document.querySelector('.minus');
+              screenMinus.addEventListener('click', () => {if(screenSize > 600)screenSize -= 50; changeScreenSize(screenSize);});
 
         function createGrid(){
 
@@ -65,11 +69,11 @@
         function deleteOldGrid(){
             newBlock.forEach(block => block.remove());
         }
-        function changeScreenSize(){
-            btnContent.textContent = '';
-            btnContent.textContent = screenSize; 
+        function changeScreenSize(size){
+            btnContent.textContent = size;
+            newBlock.forEach(a => a.style.setProperty('--BoxWidth', screenSize / gridWidth+'px'));
+            gridContainer.style.setProperty('--ScreenSize', size+'px');
         }
-
         function changeGrid (){
             gridWidth = prompt('Input Grid Size: ');
             if(gridWidth == null) return;
