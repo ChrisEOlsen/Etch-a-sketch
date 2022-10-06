@@ -14,58 +14,68 @@
     <div class="button-container">
         <button class="change-size-button">Change Size</button>
         <button class="reset-button">Erase All</button>
+        <div class="size-container">
+            <button class="screen-size-btn">-</button>
+            <div class="size-content"></div>
+            <button class="screen-size-btn">+</button>
+        </div>
     </div>
 
     <script>
+        //default
         let gridWidth = 16;
         let gridHeight = 16;
-        let screenWidth = 800;
+        let screenSize = 600;
+        let newBlock;
+
+        let mouseDown = false;
+            document.body.addEventListener('mousedown',() => (mouseDown = true));
+            document.body.addEventListener('mouseup',() => (mouseDown = false));
+
+        const gridContainer = document.querySelector('.grid-container');
+        const resetButton = document.querySelector('.reset-button');
+              resetButton.addEventListener('click',reset);
+        const changeSizeButton = document.querySelector('.change-size-button');
+              changeSizeButton.addEventListener('click',changeGrid);
+        const btnContent = document.querySelector('.size-content');
+              btnContent.textContent = screenSize;
 
         function createGrid(){
-            const gridContainer = document.querySelector('.grid-container');
 
             for (let i = 0; i < gridHeight * gridWidth; i++){
-                const newBlock = document.createElement('div');
+                newBlock = document.createElement('div');
                 newBlock.classList.add('block');
-                newBlock.style.setProperty('--BoxWidth', screenWidth / gridWidth+'px');
+                newBlock.style.setProperty('--BoxWidth', screenSize / gridWidth+'px');
                 gridContainer.appendChild(newBlock);
             }
-        }
-
-        function callAllConsts(){
-            const blocks = document.querySelectorAll('.block');
-                  blocks.forEach(block => block.addEventListener('mouseover', draw));
-            const resetButton = document.querySelector('.reset-button');
-                  resetButton.addEventListener('click',reset);
-            const changeSizeButton = document.querySelector('.change-size-button');
-                  changeSizeButton.addEventListener('click',changeGrid);
+            newBlock = document.querySelectorAll('.block');
+            newBlock.forEach(a => a.addEventListener('mousedown', draw));
+            newBlock.forEach(a => a.addEventListener('mouseover', draw));
         }
 
         createGrid();
-        callAllConsts();
 
         function draw (e){
-            this.classList.add("drawn");
+            if(e.type == 'mouseover' && !mouseDown)return;
+            this.style.setProperty('background', 'black');
         }
         function reset (){
-            const drawns = document.querySelectorAll('.drawn');
-            drawns.forEach(a => a.classList.remove('drawn'));
+            newBlock.forEach(a => a.style.setProperty('background-color', 'darkgray'));
+        }
+        function deleteOldGrid(){
+            newBlock.forEach(block => block.remove());
+        }
+        function changeScreenSize(){
+            btnContent.textContent = '';
+            btnContent.textContent = screenSize; 
         }
 
         function changeGrid (){
-            //redfine all necessary metrics
             gridWidth = prompt('Input Grid Size: ');
             if(gridWidth == null) return;
-            const blocks = document.querySelectorAll('.block');
-                  blocks.forEach(block => block.remove());
-            if (gridWidth <= 64){
-                gridHeight = gridWidth;
-                createGrid();
-                callAllConsts(); //redefine consts necessary for UI
-            }else{
-                alert('ERROR, max = 64x64');
-                changeGrid();
-            }
+            if(gridWidth > 64)alert('ERROR, max = 64x64');
+            deleteOldGrid();
+            gridHeight = gridWidth; createGrid(); //gridHeight and gridWidth are seperate values for the possibility of using 1D arrays in the future
         }
 
     </script>
