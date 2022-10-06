@@ -8,18 +8,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="grid-container">
-
-    </div>
     <div class="button-container">
-        <button class="change-size-button">Change Grid</button>
+        <button class="draw-button">Draw</button>
+        <button class="erase-button">Erase</button>
         <button class="reset-button">Erase All</button>
-        <div class="size-container">
-            <button class="screen-size-btn minus">-</button>
-            <div class="size-content"></div>
-            <button class="screen-size-btn plus">+</button>
-        </div>
+        <input type="range" min="1" max="64" value="16" class="slider" id="grid-size">
+        <div class="grid-content">16 x 16</div>
+        <input type="range" min="600" max="800" value="600" class="slider" id="canvas">
+        <div class="size-content">600 x 600</div>
     </div>
+    <div class="grid-container"></div>
 
     <script>
         //default
@@ -32,26 +30,37 @@
             document.body.addEventListener('mousedown',() => (mouseDown = true));
             document.body.addEventListener('mouseup',() => (mouseDown = false));
 
+        var sliderCanvas = document.getElementById("canvas");
+        sliderCanvas.oninput = function() {
+            screenSize = this.value;
+            changeScreenSize(screenSize);
+        }
+        var sliderGridSize = document.getElementById("grid-size");
+        sliderGridSize.oninput = function() {
+            gridWidth = this.value;
+            changeGrid();
+        }
+
         const gridContainer = document.querySelector('.grid-container');
         const resetButton = document.querySelector('.reset-button');
               resetButton.addEventListener('click',reset);
-        const changeGridButton = document.querySelector('.change-size-button');
-              changeGridButton.addEventListener('click',changeGrid);
-        const btnContent = document.querySelector('.size-content');
-              btnContent.textContent = screenSize;
-        const screenPlus = document.querySelector('.plus');
-              screenPlus.addEventListener('click',() => {if (screenSize <= 750)screenSize += 50; changeScreenSize(screenSize);});
-        const screenMinus = document.querySelector('.minus');
-              screenMinus.addEventListener('click', () => {if(screenSize > 600)screenSize -= 50; changeScreenSize(screenSize);});
+        const screenSizeContent = document.querySelector('.size-content');
+        const gridSizeContent = document.querySelector('.grid-content');
+
+        let drawOrErase = true;
+        const drawMode = document.querySelector('.draw-button');
+              drawMode.addEventListener('click', () => {drawOrErase = true});
+        const eraseMode = document.querySelector('.erase-button');
+              eraseMode.addEventListener('click', () => {drawOrErase = false});
 
         function createGrid(){
-
             for (let i = 0; i < gridHeight * gridWidth; i++){
                 newBlock = document.createElement('div');
                 newBlock.classList.add('block');
                 newBlock.style.setProperty('--BoxWidth', screenSize / gridWidth+'px');
                 gridContainer.appendChild(newBlock);
             }
+            gridContainer.style.setProperty('--ScreenSize', (screenSize)+'px');
             newBlock = document.querySelectorAll('.block');
             newBlock.forEach(a => a.addEventListener('mousedown', draw));
             newBlock.forEach(a => a.addEventListener('mouseover', draw));
@@ -61,25 +70,23 @@
 
         function draw (e){
             if(e.type == 'mouseover' && !mouseDown)return;
-            this.style.setProperty('background', 'black');
+            drawOrErase ? this.style.setProperty('background', 'black') 
+                        : this.style.setProperty('background', 'darkgray');
         }
         function reset (){
             newBlock.forEach(a => a.style.setProperty('background-color', 'darkgray'));
         }
-        function deleteOldGrid(){
-            newBlock.forEach(block => block.remove());
-        }
         function changeScreenSize(size){
-            btnContent.textContent = size;
-            newBlock.forEach(a => a.style.setProperty('--BoxWidth', screenSize / gridWidth+'px'));
-            gridContainer.style.setProperty('--ScreenSize', size+'px');
+            screenSizeContent.textContent = size+' x '+size;
+            newBlock.forEach(a => a.style.setProperty('--BoxWidth', size / gridWidth+'px'));
+            gridContainer.style.setProperty('--ScreenSize', (size)+'px');
         }
         function changeGrid (){
-            gridWidth = prompt('Input Grid Size: ');
-            if(gridWidth == null) return;
-            if(gridWidth > 64)alert('ERROR, max = 64x64');
-            deleteOldGrid();
-            gridHeight = gridWidth; createGrid(); //gridHeight and gridWidth are seperate values for the possibility of using 1D arrays in the future
+            gridSizeContent.textContent = gridWidth+' x '+gridWidth;
+            newBlock.forEach(block => block.remove());
+            gridHeight = gridWidth; createGrid();
+            changeScreenSize(screenSize);
+            drawOrErase = true; //activate draw mode again
         }
 
     </script>
