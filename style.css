@@ -50,9 +50,9 @@ body{
     width: var(--ScreenSize);
     flex-wrap: wrap;
     flex-shrink: 0;
-    border: 9px solid white;
+    border: 9px double white;
     border-radius: 10px;
-    border-style: double;
+    box-shadow: rgba(235, 235, 235, 0.24) 0px 0px 50px;
 }
 
 :root{
@@ -96,4 +96,30 @@ body{
 
 
 
+input[type='color']:hover {
+  transform: scale(1.05);
+}
+
+input[type='color']:active {
+  transition: transform 0.05s ease-in-out;
+  transform: scale(1);
+}
+
+input[type='color'] {
+  -webkit-appearance: none;
+  width: 80px;
+  height: 80px;
+  border: none;
+  background-color: #1F2938;
+}
+
+input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch {
+  border: none;
+  border-radius: 50px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 

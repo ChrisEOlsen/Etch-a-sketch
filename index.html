@@ -12,6 +12,7 @@
     <div class="project">
     <div class="project-left">
     <div class="button-container">
+        <input class="color-picker" type = 'color'>
         <button class="draw-button active">Draw</button>
         <button class="erase-button">Erase</button>
         <button class="reset-button">Erase All</button>
@@ -32,11 +33,15 @@
         let gridHeight;
         let screenSize = 600;
         let newBlock;
-
+        let currentDrawColor = '#000000';
         let mouseDown = false;
             document.body.addEventListener('mousedown',() => (mouseDown = true));
             document.body.addEventListener('mouseup',() => (mouseDown = false));
 
+        var colorPicker = document.querySelector('.color-picker');
+            colorPicker.oninput = function(){
+                currentDrawColor = this.value;
+            }
         var sliderCanvas = document.getElementById("canvas");
         sliderCanvas.oninput = function() {
             screenSize = this.value;
@@ -75,17 +80,16 @@
             newBlock.forEach(a => a.addEventListener('mousedown', draw));
             newBlock.forEach(a => a.addEventListener('mouseover', draw));
         }
-
+        
         createGrid();
 
         function decideDrawOrErase(){ //button styles
             if(drawOrErase){ drawMode.classList.add('active'); eraseMode.classList.remove('active');}
             else if(!drawOrErase){eraseMode.classList.add('active'); drawMode.classList.remove('active')}
         }
-
         function draw (e){
             if(e.type == 'mouseover' && !mouseDown)return;
-            drawOrErase ? this.style.setProperty('background', 'black') 
+            drawOrErase ? this.style.setProperty('background', currentDrawColor) 
                         : this.style.setProperty('background', 'darkgray');
         }
         function reset(){
